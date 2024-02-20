@@ -600,6 +600,8 @@ def make_supervised_data_module(tokenizer: transformers.PreTrainedTokenizer,
 
 
 def train():
+    #모델 설정 및 훈련 시 사용되는 많은 인자들을 쉽게 관리하고, 모델 훈련 코드를 보다 깔끔하게 작성할 수 있습니다.
+    #ModelArguments, DataArguments,TrainingArguments 각각 클래스로 위에 정의되어 있음. 
     parser = transformers.HfArgumentParser((ModelArguments, DataArguments, TrainingArguments))
     model_args, data_args, training_args = parser.parse_args_into_dataclasses()
     compute_dtype = (torch.float16 if training_args.fp16 else (torch.bfloat16 if training_args.bf16 else torch.float32))
@@ -799,6 +801,7 @@ def train():
 
     with open('_log/args_train.txt', 'w') as F:
         for key in vars(training_args): F.write('%s: %s\n'%(str(key), str(vars(training_args)[key])))
+        
     # end for MGIE
 
     data_module = make_supervised_data_module(tokenizer=tokenizer,
